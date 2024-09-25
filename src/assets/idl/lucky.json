@@ -1,0 +1,969 @@
+{
+  "address": "5gCxY3m86ccbzy2dszPhj9cUAa98KEdmQUvsXoqcVoA8",
+  "metadata": {
+    "name": "wheel",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "join_party",
+      "discriminator": [
+        61,
+        233,
+        64,
+        74,
+        153,
+        121,
+        183,
+        82
+      ],
+      "accounts": [
+        {
+          "name": "party",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  80,
+                  97,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              },
+              {
+                "kind": "account",
+                "path": "project.index",
+                "account": "Project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "project"
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "collection_mint_account"
+        },
+        {
+          "name": "mint_account",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint_account"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true
+        },
+        {
+          "name": "mint_authority_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "value",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "new_claim",
+      "discriminator": [
+        78,
+        177,
+        98,
+        123,
+        210,
+        21,
+        187,
+        83
+      ],
+      "accounts": [
+        {
+          "name": "party",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  80,
+                  97,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              },
+              {
+                "kind": "arg",
+                "path": "index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "project"
+        },
+        {
+          "name": "mint_authority_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "nft_collection_account",
+          "writable": true
+        },
+        {
+          "name": "mint_account",
+          "writable": true
+        },
+        {
+          "name": "associated_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint_account"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_metadata_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint_account"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "token_metadata_program"
+            }
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "new_party",
+      "discriminator": [
+        36,
+        16,
+        3,
+        76,
+        214,
+        123,
+        166,
+        7
+      ],
+      "accounts": [
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "party",
+          "writable": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "new_project",
+      "discriminator": [
+        13,
+        106,
+        54,
+        58,
+        245,
+        220,
+        235,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "project",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  80,
+                  114,
+                  111,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint_account"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_account",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_authority_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true
+        },
+        {
+          "name": "token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint_account"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "introduction",
+          "type": "string"
+        },
+        {
+          "name": "number_scope",
+          "type": "u64"
+        },
+        {
+          "name": "slot_gap",
+          "type": "u64"
+        },
+        {
+          "name": "base_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "new_reward",
+      "discriminator": [
+        216,
+        160,
+        113,
+        253,
+        207,
+        167,
+        160,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "party",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  80,
+                  97,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              },
+              {
+                "kind": "arg",
+                "path": "index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Party",
+      "discriminator": [
+        208,
+        64,
+        165,
+        146,
+        114,
+        138,
+        161,
+        100
+      ]
+    },
+    {
+      "name": "Project",
+      "discriminator": [
+        205,
+        168,
+        189,
+        202,
+        181,
+        247,
+        142,
+        19
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidNumberScope",
+      "msg": "Number scope must be greater than 0"
+    },
+    {
+      "code": 6001,
+      "name": "ProjectAlreadyOpened",
+      "msg": "Project has been opened"
+    },
+    {
+      "code": 6002,
+      "name": "PartyAlreadyClosed",
+      "msg": "The party has been closed"
+    },
+    {
+      "code": 6003,
+      "name": "PartyNotOpened",
+      "msg": "The party has not been opened"
+    },
+    {
+      "code": 6004,
+      "name": "PartyNotClosed",
+      "msg": "The party has not been closed"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidSlotGap",
+      "msg": "Slot gap must be greater than 0"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidBaseAmount",
+      "msg": "Base amount must be greater than 0"
+    },
+    {
+      "code": 6007,
+      "name": "LastPartyNotClosed",
+      "msg": "The last party is not closed yet"
+    },
+    {
+      "code": 6008,
+      "name": "PartyAlreadyOpened",
+      "msg": "The party has been opened"
+    },
+    {
+      "code": 6009,
+      "name": "AmountIsZero",
+      "msg": "The amount is zero"
+    },
+    {
+      "code": 6010,
+      "name": "AmountIsNotMultiple",
+      "msg": "The amount is not a multiple of the value"
+    },
+    {
+      "code": 6011,
+      "name": "NotEnoughBalance",
+      "msg": "Not enough balance"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidValue",
+      "msg": "Value is bad"
+    },
+    {
+      "code": 6013,
+      "name": "LuckyAlreadyFound",
+      "msg": "Lucky number already found"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidName",
+      "msg": "Invalid name, length must be between 0 and 20"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidIntroduction",
+      "msg": "Invalid introduction"
+    },
+    {
+      "code": 6016,
+      "name": "NFTAlreadyExists",
+      "msg": "NFT already exists"
+    },
+    {
+      "code": 6017,
+      "name": "NFTNotExists",
+      "msg": "NFT not exists"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidAuthority",
+      "msg": "Bad NFT authority"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidNFT",
+      "msg": "Invalid NFT"
+    },
+    {
+      "code": 6020,
+      "name": "InvalidNFTVote",
+      "msg": "Invalid NFT vote"
+    },
+    {
+      "code": 6021,
+      "name": "NFTAlreadyUsed",
+      "msg": "NFT already used"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidParty",
+      "msg": "Invalid party"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidPartyReward",
+      "msg": "Invalid party reward"
+    }
+  ],
+  "types": [
+    {
+      "name": "Party",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "index",
+            "type": "u64"
+          },
+          {
+            "name": "start_slot",
+            "type": "u64"
+          },
+          {
+            "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "votes",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "answer_slot",
+            "type": "u64"
+          },
+          {
+            "name": "answer",
+            "type": "u64"
+          },
+          {
+            "name": "reward",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Project",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "index",
+            "type": "u64"
+          },
+          {
+            "name": "number_scope",
+            "type": "u64"
+          },
+          {
+            "name": "last_party_slot",
+            "type": "u64"
+          },
+          {
+            "name": "slot_gap",
+            "type": "u64"
+          },
+          {
+            "name": "base_amount",
+            "type": "u64"
+          },
+          {
+            "name": "nft_collection",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "introduction",
+            "type": "string"
+          },
+          {
+            "name": "reward",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}
