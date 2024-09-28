@@ -16,6 +16,7 @@ export async function fetchProject(address: string, program: Program): Promise<P
             collection: res.nftCollection.toString(),
             slotGap: res.slotGap.toNumber(),
             startSlot: res.lastPartySlot.toNumber(),
+            startTimestamp: res.lastPartyTimestamp.toNumber() * 1000,
             reward: res.reward.toNumber(),
         }
     } catch(e: any) {
@@ -31,6 +32,7 @@ export async function fetchProposal(address: string, program: Program): Promise<
             address,
             index: res.index.toNumber(),
             start: res.startSlot.toNumber(),
+            startTimestamp: res.startTimestamp.toNumber() * 1000,
             total: res.total.toNumber(),
             votes: res.votes.map((amount: BN, index: number) => ({
                 value: index,

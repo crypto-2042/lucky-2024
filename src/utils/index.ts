@@ -2,18 +2,6 @@ import { PublicKey } from "@solana/web3.js";
 
 const TOKEN_METADATA_PROGRAM = new PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s')
 
-/**
- * convert slot number to actual time
- * @param slotNumber chain slot number
- * @param genesisTime default use mainnet genesis time
- * @returns 
- */
-export function slotToTime(slotNumber: number, genesisTime: number): number {
-    const slotDuration = 400; // Slot duration in milliseconds
-    // const genesisTime = 1596059090000; // Example genesis time in milliseconds (Unix timestamp)
-    return genesisTime + (slotNumber * slotDuration);
-}
-
 function u64toBuffer(n: number) {
     const res = Buffer.alloc(8);
     res.writeBigUInt64LE(BigInt(n));

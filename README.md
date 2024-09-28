@@ -1,65 +1,38 @@
 # lucky-2024
 
-这是一个提案投票项目，有多个项目，每个项目有多期提案，上一期提案结束后下一期才会开始。
+这是一个提案投票项目，有多个项目，每个项目有多期提案。
 
 
-## 开发说明
+## demo
 
-### 技术栈
+| network | project | period | number range | base amount |
+| -- | -- | -- | -- | -- |
+| devnet | `Cm1mwEEYvpxhN4EQ9hJtjxSRj793LdbEtG9sddL1Gw6k` | 5min | 1~5 | 0.01 SOL |
+| devnet | `4MsqZqhujSdFyjFnvSf8zaFZ8tPGxskisMmaN36Ka15v` | 12h | 1~10 | 0.01 SOL |
 
-- iconify
-- tailwindcss
-- vue 3
-- pinia
+<div style="display: flex; align-items: center;">
+<div>
+    <p>设置网络，确保 rpc 节点能正常访问</p>
+    <img src="docs/images/settings.png"  />
+</div>
 
-### 业务知识
+<div>
+    <p>连接钱包</p>
+    <img src="docs/images/mine.png"  />
+</div>
 
-- solana
-- anchor 智能合约
-- metaplex NFT
-- solana 钱包
+<div >
+    <p>导入项目或创建项目</p>
+    <img src="docs/images/creator.png"  />
+</div>
 
-### 项目结构
+<div >
+    <p>进入项目详情进行投票</p>
+    <img src="docs/images/project.png"  />
+</div>
 
-- pages: 页面
-- components: 组件
-- layouts: 布局
-- store: 状态管理
-- utils: 工具类
-- types: 类型
-- assets: 资源
-
-
-### 页面
-
-- `index.vue`: 首页
-    - 展示所有项目
-- `project/[address].vue`: 项目页
-    1. 展示项目详情
-    2. 以滑动卡片的方式展示每一期提案
-    3. 如果提案处于投票中，则展示投票按钮，点击后可以进行投票
-    4. 根据当前选中的提案展示投票情况
-- `project/creator.vue`: 项目创建页
-    - 创建新项目
-- `mine.vue`: 我的
-    1. 展示当前登录的用户信息
-    2. 展示当前的设置菜单
-- `vote.vue`: 投票记录页
-    - 展示当前用户的投票记录
-    - 根据当前选中的项目进行筛选
-
-#### 页面风格
-
-- 深色背景
-- 黑金渐变主题
-- 圆角
-- 阴影
-- 渐变
-- 边框
-- 动画
-
-## devnet
-
-- GR8DhL9DyEWJfA9hb7grrmVZ7sKiPP8VWyXrJm4R3wnk
-- DWXNj921TGrb4zP9U5mCohHXGUUmPNC7z6DXqczTpckh
-
+<div >
+    <p>查看投票记录及领取奖励</p>
+    <img src="docs/images/vote.png"  />
+</div>
+</div>

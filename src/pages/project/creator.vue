@@ -94,19 +94,19 @@ const createProject = async () => {
       <div>
         <label for="period" class="block mb-2">Period(1min~48h)</label>
         <input v-model.number="period" id="period" type="number" required
-          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500">
+          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ">
       </div>
 
       <div>
         <label for="voteRange" class="block mb-2">Number Range</label>
         <input v-model.number="numberRange" id="voteRange" type="number" required
-          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500">
+          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ">
       </div>
 
       <div>
-        <label for="baseAmount" class="block mb-2">Base Amount</label>
+        <label for="baseAmount" class="block mb-2">Base Amount(SOL)</label>
         <input v-model.number="baseAmount" id="baseAmount" type="number" min="0.01" step="0.01" required
-          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500">
+          class="w-full bg-gray-800 rounded-lg p-3 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500  [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ">
       </div>
 
       <button type="submit"

@@ -57,8 +57,8 @@ const claimReward = async (nft: VoteNFT) => {
 }
 
 const convertVote = (nft: Metadata, project: string): VoteNFT => {
-    const name = nft.name.replaceAll('\u0000', '')
-    const symbol = nft.symbol.replaceAll('\u0000', '')
+    const name = nft.name
+    const symbol = nft.symbol
     const voteInfo = symbol.split('-')
     const index = parseInt(voteInfo[0])
     const value = parseInt(voteInfo[1])
@@ -118,7 +118,6 @@ const initRewards = async () => {
     for (const address of proposals) {
         const proposal = await fetchProposal(address, program.value)
         if (proposal) {
-            console.log(proposal)
             rewards.value[address] = {
                 answer: proposal.answer,
                 reward: proposal.reward,
@@ -145,7 +144,7 @@ watch(selectedProject, async () => {
     <!-- 头部展示项目 address，居中展示投票的 value，和数量，如果 proposal 在 reward 中，则突出展示 reward -->
 
 
-    <div v-if="wallet.connected.value" class="flex flex-col items-center justify-start min-h-screen p-4 bg-black">
+    <div v-if="wallet.connected.value" class="flex flex-col items-center justify-start h-full p-4 bg-black">
         <div class="w-full max-w-md mb-6">
             <select v-model="selectedProject" @change="initNfts"
                 class="w-full bg-gray-800 text-yellow-300 border border-yellow-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-500">
@@ -178,9 +177,10 @@ watch(selectedProject, async () => {
                 </div>
                 <div class="mt-4 flex justify-between text-sm relative z-10">
                     <span>No.{{ vote.index }}</span>
-                    <span v-if="rewards[vote.proposal]">
-                        <span>{{ vote.claimed ? 'claimed' : 'reward' }}</span>
+                    <span>
+                        <span>{{ rewards[vote.proposal]?.answer ? 'End' : 'Running' }}</span>
                     </span>
+                   
                 </div>
                 <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     <div class="font-bold opacity-10 text-gold" :class="[

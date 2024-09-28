@@ -893,6 +893,10 @@
             "type": "u64"
           },
           {
+            "name": "start_timestamp",
+            "type": "i64"
+          },
+          {
             "name": "total",
             "type": "u64"
           },
@@ -937,6 +941,10 @@
           {
             "name": "last_party_slot",
             "type": "u64"
+          },
+          {
+            "name": "last_party_timestamp",
+            "type": "i64"
           },
           {
             "name": "slot_gap",

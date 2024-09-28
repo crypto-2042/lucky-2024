@@ -8,6 +8,7 @@ export interface Project {
     amount: number
     scope: number
     startSlot: number
+    startTimestamp: number
     slotGap: number
     reward: number
     collection: string
@@ -21,12 +22,14 @@ export interface Vote {
 export interface Proposal {
     address: string
     start: number
+    startTimestamp: number
     index: number
     answer: number
     answerSlot: number
     reward: number
     total: number
     votes: Vote[]
+
 }
 
 export interface VoteNFT {

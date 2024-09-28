@@ -1,24 +1,8 @@
 <script setup lang="ts">
 import { HomeOutline, PersonOutline, AppsOutline } from '@vicons/ionicons5';
 import { WalletMultiButton } from 'solana-wallets-vue';
-import { useConfigStore } from './states/config';
-import { Connection } from '@solana/web3.js';
-import { computed, onMounted } from 'vue';
 
-const configStore = useConfigStore()
-const connection = computed(() => new Connection(configStore.currentRPC, 'confirmed'))
 
-async function initGenesisTime() {
-  if (configStore.network == 'localnet') {
-    const slot = await connection.value.getSlot()
-    configStore.updateGenesisTime(Date.now() - slot * 400)
-    return
-  }
-}
-
-onMounted(async () => {
-  await initGenesisTime()
-})
 </script>
 <template>
   <div class="flex flex-col h-screen bg-gradient-to-b from-black to-gray-900 text-gold">
@@ -32,7 +16,7 @@ onMounted(async () => {
 
     <!-- 中部内容页 -->
     <div class="flex-1 overflow-y-auto">
-      <RouterView />
+        <RouterView />
     </div>
     <!-- 底部导航栏 -->
     <div class="flex items-center justify-between h-14 bg-gradient-to-r from-purple-900 to-indigo-900 shadow-lg">

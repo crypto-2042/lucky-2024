@@ -4,10 +4,10 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.j
 import { AnchorProvider, BN, Program, type Idl } from '@coral-xyz/anchor';
 import idl from '~/assets/idl/lucky.json';
 import { fetchProject, fetchProposal } from '~/api/contract';
-import { slotToTime, formatTime } from '~/utils';
+import { formatTime } from '~/utils';
 import { useConfigStore } from '~/states/config';
 import { useWallet, useAnchorWallet } from 'solana-wallets-vue';
-import{ deriveProposalAccount, deriveMetadataAccount } from '~/utils';
+import { deriveProposalAccount, deriveMetadataAccount } from '~/utils';
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import useMessage from '~/hooks/useMessage';
@@ -24,10 +24,14 @@ const anchorWallet = useAnchorWallet()
 
 const configStore = useConfigStore()
 const connection = computed(() => new Connection(configStore.currentRPC, 'confirmed'))
-const program = computed(() => new Program(idl as Idl, new AnchorProvider(connection.value, new AnchorWallet(Keypair.generate()))))
-const genesisTime = computed(() => configStore.genesisTime)
+const onlyReadProgram = computed(() => new Program(idl as Idl, new AnchorProvider(connection.value, new AnchorWallet(Keypair.generate()))))
+const writeProgram = computed(() => {
+    if (anchorWallet.value === null) {
+        return
+    }
+    return new Program(idl as Idl, new AnchorProvider(connection.value, anchorWallet.value!, { skipPreflight: true}))
+})
 const now = ref(Date.now())
-const currentSlot = computed(() => (now.value - configStore.genesisTime) / 400)
 const project = ref<Project>()
 const proposal = ref<Proposal>()
 const currentIndex = ref(0)
@@ -42,13 +46,34 @@ const period = computed(() => {
     const hour = Math.floor(gap / 60 / 60)
     const minute = Math.floor((gap - hour * 60 * 60) / 60)
     if (hour > 0) {
-        return `${hour}h ${minute}m`
+        if (minute > 0) {
+            return `${hour}h ${minute}m`
+        } else {
+            return `${hour}h`
+        }
     }
     return `${minute}min`
 })
 
+const progressPercentage = computed(() => {
+    if (!proposal.value) {
+        return 0
+    }
+    const gap = project.value!.slotGap * 400
+    const startTime = proposal.value.startTimestamp
+    const endTime = startTime + gap
+    if (now.value > endTime) {
+        return 100
+    }
+    if (now.value < startTime) {
+        return 0
+    }
+    const elapsed = now.value - startTime;
+    return Math.min(Math.max((elapsed / gap) * 100, 0), 100);
+})
+
 async function initProject() {
-    const res = await fetchProject(projectAddress as string, program.value)
+    const res = await fetchProject(projectAddress as string, onlyReadProgram.value)
     if (!res) {
         return
     }
@@ -59,12 +84,11 @@ async function initProject() {
 async function initProposal(index: number) {
     if (index == 0) return
     const account = deriveProposalAccount(idl.address, projectAddress, index)
-    const res = await fetchProposal(account.toBase58(), program.value)
+    const res = await fetchProposal(account.toBase58(), onlyReadProgram.value)
     if (!res) {
         return
     }
     proposal.value = res
-    console.log('proposal', proposal.value)
     initProposalAmount()
     await initVotes()
 }
@@ -74,12 +98,12 @@ async function newProposal() {
         return
     }
 
-    const proposalProgram = new Program(idl as Idl, new AnchorProvider(connection.value, anchorWallet.value!, {}))
+    const nextIndex = project.value.index + 1
     try {
-        const tx = await proposalProgram.methods.newParty()
+        const tx = await writeProgram.value!.methods.newParty()
             .accountsPartial({
                 project: new PublicKey(projectAddress),
-                party: deriveProposalAccount(idl.address, projectAddress, project.value.index + 1),
+                party: deriveProposalAccount(idl.address, projectAddress, nextIndex),
             }).rpc()
         console.log(`new proposal: [${tx}]`)
         message.success('New proposal success')
@@ -88,13 +112,20 @@ async function newProposal() {
         message.error('New proposal failed')
         return
     }
-    message.success('New proposal success')
-    await initProposal(project.value.index + 1)
+    message.success('New proposal success, waiting for the next proposal')
+
+    // localnet is fast, but mainnet and testnet is slow
+    setTimeout(async () => {
+        await initProject()
+        await initProposal(nextIndex)
+
+    }, 15 * 1000);
 }
+
 async function newReward(index: number) {
-    const proposalProgram = new Program(idl as Idl, new AnchorProvider(connection.value, anchorWallet.value!, {}))
+    console.log('new reward', index)
     try {
-        const tx = await proposalProgram.methods.newReward(new BN(index))
+        const tx = await writeProgram.value!.methods.newReward(new BN(index))
             .accountsPartial({
                 project: new PublicKey(projectAddress),
             }).rpc()
@@ -146,9 +177,8 @@ async function vote(value: number, amount: number) {
     const party = new PublicKey(proposal.value.address)
     const mint = Keypair.generate()
     const metadataAccount = deriveMetadataAccount(mint.publicKey)
-    const voteProgram = new Program(idl as Idl, new AnchorProvider(connection.value, anchorWallet.value!, {}))
     try {
-        const tx = await voteProgram.methods.joinParty(new BN(amount), new BN(value))
+        const tx = await writeProgram.value!.methods.joinParty(new BN(amount), new BN(value))
             .accountsPartial({
                 project: new PublicKey(projectAddress),
                 party,
@@ -198,19 +228,7 @@ async function nextProposal() {
     await initProposal(currentIndex.value)
 }
 
-function getProgressPercentage(startSlot: number): number {
-    const now = currentSlot.value
-    const gap = project.value!.slotGap
-    const endSlot = startSlot + gap
-    if (now > endSlot) {
-        return 100
-    }
-    if (now < startSlot) {
-        return 0
-    }
-    const elapsed = now - startSlot;
-    return Math.min(Math.max((elapsed / gap) * 100, 0), 100);
-}
+
 
 
 </script>
@@ -244,12 +262,11 @@ function getProgressPercentage(startSlot: number): number {
             <div class="mt-6 bg-white bg-opacity-20 rounded-lg p-4 text-center">
                 <span class="text-sm text-yellow-300 font-bold">Number Range</span>
                 <div class="text-2xl font-bold text-yellow-300 mt-2">
-                    <!-- {{ formatTime(slotToTime(project.startSlot, genesisTime)) }} -->
                     1 ~ {{ project.scope }}
                 </div>
             </div>
             <div class="flex justify-center">
-                <button v-if="project.index == 0 || project.startSlot + project.slotGap < currentSlot"
+                <button v-if="project.index == 0 || project.startTimestamp + project.slotGap * 400 < now"
                     @click="newProposal"
                     class="mt-2 bg-yellow-300 hover:bg-yellow-200 text-black font-bold py-1 px-3 rounded text-sm">New
                     Proposal</button>
@@ -269,7 +286,8 @@ function getProgressPercentage(startSlot: number): number {
                                 <span class="font-bold text-yellow-300">No.{{ proposal.index }}</span>
                             </div>
                             <div class="flex flex-col justify-between flex-grow py-2">
-                                <div v-if="proposal.start + project.slotGap > currentSlot" class="text-center mt-5">
+                                <div v-if="proposal.startTimestamp + project.slotGap * 400 > now"
+                                    class="text-center mt-5">
                                     <div class="flex justify-between">
                                         <div class="flex-1">
                                             <span class="text-xs text-yellow-400 font-bold">Pool</span>
@@ -286,7 +304,7 @@ function getProgressPercentage(startSlot: number): number {
                                     <div class="mt-2">
                                         <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
                                             <div class="bg-blue-600 h-full"
-                                                :style="{ width: `${getProgressPercentage(proposal.start).toFixed(2)}%` }">
+                                                :style="{ width: `${progressPercentage}%` }">
                                             </div>
                                         </div>
                                     </div>
@@ -306,7 +324,7 @@ function getProgressPercentage(startSlot: number): number {
                                         </div>
 
                                     </div>
-                                  
+
                                     <div class="flex justify-between">
                                         <div class="flex-1">
                                             <span class="text-2xs text-yellow-300">Pool</span>
@@ -317,17 +335,11 @@ function getProgressPercentage(startSlot: number): number {
                                             <div class="text-3xl font-bold text-yellow-300">{{ proposal.total }}</div>
                                         </div>
                                     </div>
-                                    <div v-if="proposal.answer == 0" class="flex justify-center">
-                                        <button
-                                            class="mt-2 bg-yellow-300 hover:bg-yellow-200 text-black font-bold py-1 px-3 rounded text-sm"
-                                            @click="newReward(proposal.index)">Reward</button>
-                                    </div>
+
                                 </div>
                                 <div class="flex justify-between text-xs mt-1">
-                                    <span>{{ formatTime(slotToTime(proposal.start, genesisTime))
-                                        }}</span>
-                                    <span>{{ formatTime(slotToTime(proposal.start + project.slotGap,
-                                        genesisTime)) }}</span>
+                                    <span>{{ formatTime(proposal.startTimestamp) }}</span>
+                                    <span>{{ formatTime(proposal.startTimestamp + project.slotGap * 400) }}</span>
                                 </div>
                             </div>
                             <div class="absolute bottom-20 left-0 right-0 flex justify-between px-3">
@@ -336,6 +348,12 @@ function getProgressPercentage(startSlot: number): number {
                                         class="bg-yellow-200 bg-opacity-10 text-yellow-200 rounded-full p-1 hover:bg-yellow-200 hover:bg-opacity-20 transition-colors duration-300">
                                         &lt;
                                     </button>
+                                </div>
+                                <div v-if="proposal.answer == 0 && (proposal.startTimestamp + project.slotGap * 400 < now)"
+                                    class="flex justify-center">
+                                    <button
+                                        class="mt-2 bg-yellow-300 hover:bg-yellow-200 text-black font-bold py-1 px-3 rounded text-sm"
+                                        @click="newReward(proposal.index)">Reward</button>
                                 </div>
                                 <div class="flex-1 flex justify-end">
                                     <button @click="nextProposal" v-show="currentIndex > 1"
@@ -352,7 +370,7 @@ function getProgressPercentage(startSlot: number): number {
                 Login to vote
             </div>
             <template v-else>
-                <VoteForm v-if="currentSlot < proposal.start + project.slotGap" :base="project.amount"
+                <VoteForm v-if="proposal.startTimestamp + project.slotGap * 400 > now" :base="project.amount"
                     :scope="project.scope" @vote="vote" />
             </template>
 
